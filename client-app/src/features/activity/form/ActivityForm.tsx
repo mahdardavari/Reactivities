@@ -1,11 +1,12 @@
 import React, { useState, FormEvent, useContext, useEffect } from "react";
-import { Form, Segment, Button } from "semantic-ui-react";
+import { Form, Segment, Button, Grid } from "semantic-ui-react";
 import { IActivity } from "./../../../app/models/activity";
 import ActivityStore from "../../../app/stores/activityStore";
 
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
+
 
 interface DetailParams {
   id: string;
@@ -77,7 +78,9 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   };
 
   return (
-    <Segment clearing>
+    <Grid>
+      <Grid.Column width={10}>
+      <Segment clearing>
       <Form onSubmit={handleSubmit}>
         <Form.Input
           onChange={handleChangeInput}
@@ -132,6 +135,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
         />
       </Form>
     </Segment>
+      </Grid.Column>
+   </Grid>
+
+    
   );
 };
 
