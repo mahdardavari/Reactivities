@@ -17,24 +17,20 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
 }) => {
   const activityStore = useContext(ActivityStore);
-  const {
-    activity,
-
-    loadActivity,
-    loadingInitial,
-  } = activityStore;
+  const { activity, loadActivity, loadingInitial } = activityStore;
 
   useEffect(() => {
     loadActivity(match.params.id);
   }, [loadActivity, match.params.id]);
 
-  if (loadingInitial || !activity)
+  if (loadingInitial)
     return <LoadingComponent content="Loading activity ..." />;
+  if (!activity) return <h2>Activity Not Found</h2>;
   return (
     <Grid>
       <Grid.Column width={10}>
         <ActivityDetailedHeader activity={activity} />
-        <ActivityDetailedInfo activity={activity}  />
+        <ActivityDetailedInfo activity={activity} />
         <Chat />
       </Grid.Column>
       <Grid.Column width={6}>
@@ -42,8 +38,6 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
       </Grid.Column>
     </Grid>
   );
-
- 
 };
 
 export default observer(ActivityDetails);

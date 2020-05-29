@@ -49,7 +49,7 @@ class ActivityStore {
       runInAction("load activities error", () => {
         this.loadingInitial = false;
       });
-      console.log(error);
+      //console.log(error);
     }
   };
   @action selectActivity = (id: string) => {
