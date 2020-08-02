@@ -1,10 +1,13 @@
 import React from "react";
-import { Item, Button, Segment, Icon } from "semantic-ui-react";
+import { Item, Button, Segment, Icon, Label } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { IActivity } from "./../../../app/models/activity";
 import { format } from "date-fns";
+import ActivityListItemAttendees from "./ActivityListItemAttendees";
+import { link } from "fs";
 
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
+  const host = activity.attendees.filter((x) => x.isHost)[0];
   return (
     <Segment.Group>
       <Segment>
@@ -13,12 +16,32 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
             <Item.Image
               size="tiny"
               circular
-              src="/assets/user.png"
+              src={host.image || "/assets/user.png"}
             ></Item.Image>
             <Item.Content>
-              <Item.Header as="a">{activity.title}</Item.Header>
+              <Item.Header as={link} to={`/activities/${activity.id}`}>
+                {activity.title}
+              </Item.Header>
 
-              <Item.Description>Hosted by Bob</Item.Description>
+              <Item.Description>Hosted by {host.displayName}</Item.Description>
+              {activity.isHost && (
+                <Item.Description>
+                  <Label
+                    color="orange"
+                    basic
+                    content="You are hosting this activity"
+                  />
+                </Item.Description>
+              )}
+              {activity.isGoing && !activity.isHost && (
+                <Item.Description>
+                  <Label
+                    color="green"
+                    basic
+                    content="You are going this activity"
+                  />
+                </Item.Description>
+              )}
             </Item.Content>
           </Item>
         </Item.Group>
@@ -29,7 +52,9 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
         <Icon name="marker" />
         {activity.venue},{activity.city}
       </Segment>
-      <Segment secondary>Attendes will go here</Segment>
+      <Segment secondary>
+        <ActivityListItemAttendees attendees={activity.attendees} />
+      </Segment>
       <Segment clearing>
         <span>{activity.description}</span>
         <Button
